@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hornoxe_app/services/hornoxe_service.dart';
 import 'package:provider/provider.dart';
 
@@ -14,7 +15,11 @@ class PicdumpScreen extends StatelessWidget {
       appBar: AppBar(title: const Text("Picdump #42 🤭")),
       body: SafeArea(
         child: imageUrls == null
-            ? const Center(child: CircularProgressIndicator())
+            ? Center(
+                child: SpinKitThreeInOut(
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              )
             : ListView.builder(
                 itemCount: imageUrls.length,
                 itemBuilder: (context, index) {
