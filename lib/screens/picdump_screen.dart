@@ -22,7 +22,7 @@ class PicdumpScreen extends StatelessWidget {
 
                   return Padding(
                     padding:
-                        EdgeInsets.fromLTRB(20, 20, 20, isLastqImage ? 20 : 0),
+                        EdgeInsets.fromLTRB(20, 20, 20, isLastImage ? 20 : 0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.network(
