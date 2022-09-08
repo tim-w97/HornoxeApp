@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:hornoxe_app/services/hornoxe_service.dart';
+import 'package:hornoxe_app/providers/picdump_provider.dart';
 import 'package:provider/provider.dart';
 
 class PicdumpScreen extends StatelessWidget {
@@ -8,8 +8,8 @@ class PicdumpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hornoxeService = context.watch<HornoxeService>();
-    final imageUrls = hornoxeService.imageUrls;
+    final picdump = context.watch<PicdumpProvider>();
+    final imageUrls = picdump.imageLinks;
 
     return Scaffold(
       appBar: AppBar(title: const Text("Picdump #42 🤭")),

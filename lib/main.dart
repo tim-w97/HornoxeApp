@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hornoxe_app/providers/picdump_provider.dart';
 import 'package:hornoxe_app/screens/picdump_screen.dart';
-import 'package:hornoxe_app/services/hornoxe_service.dart';
 import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const HornoxeApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => PicdumpProvider(),
+      child: const HornoxeApp(),
+    ),
+  );
 }
 
 class HornoxeApp extends StatelessWidget {
@@ -15,10 +20,7 @@ class HornoxeApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.dark(),
       routes: {
-        "/": (context) => ChangeNotifierProvider(
-              create: (context) => HornoxeService(),
-              child: const PicdumpScreen(),
-            ),
+        "/": (context) => const PicdumpScreen(),
       },
     );
   }
