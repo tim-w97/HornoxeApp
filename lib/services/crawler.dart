@@ -1,25 +1,48 @@
 import 'dart:convert';
+import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
 
 class Crawler {
-  final _picdumpsUri = Uri.https("hornoxe.com", "picdumps");
+  Future<Map<String, String>> get picdumpLinks async {
+    final picdumpsUri = Uri.https("hornoxe.com", "picdumps");
+    final document = await _getDocument(forUri: picdumpsUri);
 
-  Future<List<String>> get imageLinks async {
-    Uri hornoxeUri =
-        Uri.parse("https://www.hornoxe.com/hornoxe-com-picdump-793/");
+    final linkElements = document.querySelectorAll(".storytitle a");
 
-    final response = await get(hornoxeUri, headers: {"charset": "utf-8"});
+    Map<String, String> picdumpLinks = {};
+
+    for (final linkElement in linkElements) {
+      // only add picdumps
+      if (linkElement.text.contains("Picdump #")) {
+        String linkText = linkElement.text.split("–")[1].trim();
+        String link = linkElement.attributes["href"]!;
+
+        picdumpLinks[linkText] = link;
+      }
+    }
+
+    return picdumpLinks;
+  }
+
+  Future<List<String>> fetchImageLinks({required Uri fromUri}) async {
+    final document = await _getDocument(forUri: fromUri);
+
+    final imageUrls = document
+        .querySelectorAll("img[title^=picdump]")
+        .map((element) => element.attributes["src"]!)
+        .toList();
+
+    return imageUrls;
+  }
+
+  Future<Document> _getDocument({required Uri forUri}) async {
+    final response = await get(forUri);
 
     final bytes = response.bodyBytes;
     final html = utf8.decode(bytes, allowMalformed: true);
     final document = parse(html, encoding: "utf-8");
 
-    final imageUrls = document
-        .querySelectorAll("#ngg-gallery-1442-44481 img")
-        .map((element) => element.attributes["src"]!)
-        .toList();
-
-    return imageUrls;
+    return document;
   }
 }

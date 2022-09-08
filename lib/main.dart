@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hornoxe_app/providers/picdump_provider.dart';
-import 'package:hornoxe_app/screens/picdump_screen.dart';
+import 'package:hornoxe_app/screens/images_screen.dart';
+import 'package:hornoxe_app/screens/picdumps_screen.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -20,7 +21,8 @@ class HornoxeApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.dark(),
       routes: {
-        "/": (context) => const PicdumpScreen(),
+        "/": (context) => const PicdumpsScreen(),
+        "/images": (context) => const ImagesScreen(),
       },
     );
   }

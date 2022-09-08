@@ -3,27 +3,28 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hornoxe_app/providers/picdump_provider.dart';
 import 'package:provider/provider.dart';
 
-class PicdumpScreen extends StatelessWidget {
-  const PicdumpScreen({Key? key}) : super(key: key);
+class ImagesScreen extends StatelessWidget {
+  const ImagesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final picdump = context.watch<PicdumpProvider>();
-    final imageUrls = picdump.imageLinks;
+    final picdumpProvider = context.watch<PicdumpProvider>();
+
+    final imageLinks = picdumpProvider.imageLinks;
 
     return Scaffold(
       appBar: AppBar(title: const Text("Picdump #42 🤭")),
       body: SafeArea(
-        child: imageUrls == null
+        child: imageLinks == null
             ? Center(
                 child: SpinKitThreeInOut(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
               )
             : ListView.builder(
-                itemCount: imageUrls.length,
+                itemCount: imageLinks.length,
                 itemBuilder: (context, index) {
-                  bool isLastImage = index == imageUrls.length - 1;
+                  bool isLastImage = index == imageLinks.length - 1;
 
                   return Padding(
                     padding:
@@ -31,7 +32,7 @@ class PicdumpScreen extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.network(
-                        imageUrls.elementAt(index),
+                        imageLinks.elementAt(index),
                         fit: BoxFit.cover,
                       ),
                     ),
