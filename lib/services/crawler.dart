@@ -8,18 +8,15 @@ class Crawler {
     final picdumpsUri = Uri.https("hornoxe.com", "picdumps");
     final document = await _getDocument(forUri: picdumpsUri);
 
-    final linkElements = document.querySelectorAll(".storytitle a");
+    final linkElements = document.querySelectorAll("a[title*='Picdump #']");
 
     Map<String, String> picdumpLinks = {};
 
     for (final linkElement in linkElements) {
-      // only add picdumps
-      if (linkElement.text.contains("Picdump #")) {
-        String linkText = linkElement.text.split("–")[1].trim();
-        String link = linkElement.attributes["href"]!;
+      String picdumpHash = linkElement.text.split(" ").last;
+      String link = linkElement.attributes["href"]!;
 
-        picdumpLinks[linkText] = link;
-      }
+      picdumpLinks[picdumpHash] = link;
     }
 
     return picdumpLinks;

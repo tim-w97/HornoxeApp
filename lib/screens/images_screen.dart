@@ -13,7 +13,9 @@ class ImagesScreen extends StatelessWidget {
     final imageLinks = picdumpProvider.imageLinks;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Picdump #42 🤭")),
+      appBar: AppBar(
+        title: Text("Picdump ${picdumpProvider.currentPicdumpHash}"),
+      ),
       body: SafeArea(
         child: imageLinks == null
             ? Center(

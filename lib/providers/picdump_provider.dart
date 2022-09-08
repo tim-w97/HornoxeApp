@@ -7,6 +7,8 @@ class PicdumpProvider with ChangeNotifier {
   Map<String, String>? picdumpLinks;
   List<String>? imageLinks;
 
+  String? currentPicdumpHash;
+
   PicdumpProvider() {
     _setPicdumps();
   }
@@ -18,8 +20,12 @@ class PicdumpProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  void setImages({required String fromLink}) async {
+  void setImages({
+    required String fromLink,
+    required String picdumpHash,
+  }) async {
     imageLinks = null;
+    currentPicdumpHash = picdumpHash;
 
     imageLinks = await crawler.fetchImageLinks(fromUri: Uri.parse(fromLink));
     notifyListeners();

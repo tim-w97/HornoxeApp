@@ -35,7 +35,9 @@ class PicdumpsScreen extends StatelessWidget {
                       color: Theme.of(context).colorScheme.primary,
                       onPressed: () {
                         picdumpProvider.setImages(
-                            fromLink: picdumpLinks.values.elementAt(index));
+                          fromLink: picdumpLinks.values.elementAt(index),
+                          picdumpHash: picdumpLinks.keys.elementAt(index),
+                        );
 
                         Navigator.pushNamed(
                           context,
