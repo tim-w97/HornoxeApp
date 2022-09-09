@@ -10,23 +10,26 @@ class ImagesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final picdumpProvider = context.watch<PicdumpProvider>();
 
-    final imageLinks = picdumpProvider.imageLinks;
-
     return Scaffold(
       appBar: AppBar(
-        title: Text("Picdump ${picdumpProvider.currentPicdump?.hash}"),
+        title: Text("Picdump ${picdumpProvider.currentPicdump.hash}"),
       ),
       body: SafeArea(
-        child: imageLinks == null
-            ? Center(
-                child: SpinKitThreeInOut(
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-              )
-            : ListView.builder(
-                itemCount: imageLinks.length,
+        child: FutureBuilder<List<String>>(
+            future: picdumpProvider.imageLinks,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(
+                  child: SpinKitThreeInOut(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                );
+              }
+
+              return ListView.builder(
+                itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  bool isLastImage = index == imageLinks.length - 1;
+                  bool isLastImage = index == snapshot.data!.length - 1;
 
                   return Padding(
                     padding:
@@ -34,13 +37,14 @@ class ImagesScreen extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
                       child: Image.network(
-                        imageLinks.elementAt(index),
+                        snapshot.data!.elementAt(index),
                         fit: BoxFit.cover,
                       ),
                     ),
                   );
                 },
-              ),
+              );
+            }),
       ),
     );
   }

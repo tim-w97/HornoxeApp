@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    ChangeNotifierProvider(
+    Provider(
       create: (context) => PicdumpProvider(),
       child: const HornoxeApp(),
     ),
