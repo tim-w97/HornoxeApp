@@ -10,21 +10,21 @@ class PicdumpsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final picdumpProvider = context.watch<PicdumpProvider>();
 
-    final picdumpLinks = picdumpProvider.picdumpLinks;
+    final picdumps = picdumpProvider.picdumps;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("All Picdumps"),
       ),
       body: SafeArea(
-        child: picdumpLinks == null
+        child: picdumps == null
             ? Center(
                 child: SpinKitThreeInOut(
                   color: Theme.of(context).colorScheme.secondary,
                 ),
               )
             : ListView.builder(
-                itemCount: picdumpLinks.length,
+                itemCount: picdumps.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
@@ -35,8 +35,7 @@ class PicdumpsScreen extends StatelessWidget {
                       color: Theme.of(context).colorScheme.primary,
                       onPressed: () {
                         picdumpProvider.setImages(
-                          fromLink: picdumpLinks.values.elementAt(index),
-                          picdumpHash: picdumpLinks.keys.elementAt(index),
+                          ofPicdump: picdumps.elementAt(index),
                         );
 
                         Navigator.pushNamed(
@@ -45,7 +44,7 @@ class PicdumpsScreen extends StatelessWidget {
                         );
                       },
                       child: Text(
-                        picdumpLinks.keys.elementAt(index),
+                        picdumps.elementAt(index).hash,
                         style: const TextStyle(
                           fontSize: 20,
                         ),

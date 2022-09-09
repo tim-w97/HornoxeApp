@@ -1,33 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:hornoxe_app/models/picdump.dart';
 import 'package:hornoxe_app/services/crawler.dart';
 
 class PicdumpProvider with ChangeNotifier {
   final crawler = Crawler();
 
-  Map<String, String>? picdumpLinks;
+  List<Picdump>? picdumps;
   List<String>? imageLinks;
 
-  String? currentPicdumpHash;
+  Picdump? currentPicdump;
 
   PicdumpProvider() {
     _setPicdumps();
   }
 
   void _setPicdumps() async {
-    picdumpLinks = null;
+    picdumps = null;
 
-    picdumpLinks = await crawler.picdumpLinks;
+    picdumps = await crawler.picdumps;
     notifyListeners();
   }
 
   void setImages({
-    required String fromLink,
-    required String picdumpHash,
+    required Picdump ofPicdump,
   }) async {
     imageLinks = null;
-    currentPicdumpHash = picdumpHash;
+    currentPicdump = ofPicdump;
 
-    imageLinks = await crawler.fetchImageLinks(fromUri: Uri.parse(fromLink));
+    imageLinks = await crawler.fetchImageLinks(fromUri: ofPicdump.uri);
+
     notifyListeners();
   }
 }

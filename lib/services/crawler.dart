@@ -1,25 +1,29 @@
 import 'dart:convert';
+import 'package:hornoxe_app/models/picdump.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart';
 
 class Crawler {
-  Future<Map<String, String>> get picdumpLinks async {
+  Future<List<Picdump>> get picdumps async {
     final picdumpsUri = Uri.https("hornoxe.com", "picdumps");
     final document = await _getDocument(forUri: picdumpsUri);
 
-    final linkElements = document.querySelectorAll("a[title*='Picdump #']");
+    final links = document.querySelectorAll("a[title*='Picdump #']");
 
-    Map<String, String> picdumpLinks = {};
+    final picdumps = links.map((link) {
+      String hash = link.text.split(" ").last;
+      String href = link.attributes["href"]!;
 
-    for (final linkElement in linkElements) {
-      String picdumpHash = linkElement.text.split(" ").last;
-      String link = linkElement.attributes["href"]!;
+      return Picdump(
+        uri: Uri.parse(href),
+        thumbnailLink: "thumbnailLink",
+        hash: hash,
+        timestamp: "timestamp",
+      );
+    }).toList();
 
-      picdumpLinks[picdumpHash] = link;
-    }
-
-    return picdumpLinks;
+    return picdumps;
   }
 
   Future<List<String>> fetchImageLinks({required Uri fromUri}) async {
