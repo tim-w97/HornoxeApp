@@ -18,6 +18,6 @@ class PicdumpProvider {
     required Picdump ofPicdump,
   }) {
     currentPicdump = ofPicdump;
-    imageLinks = crawler.fetchImageLinks(fromUri: ofPicdump.uri);
+    imageLinks = crawler.fetchAllImageLinks(fromMainPicdumpUri: ofPicdump.uri);
   }
 }

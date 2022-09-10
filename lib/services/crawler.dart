@@ -26,15 +26,47 @@ class Crawler {
     return picdumps;
   }
 
-  Future<List<String>> fetchImageLinks({required Uri fromUri}) async {
+  Future<List<String>> fetchAllImageLinks({
+    required Uri fromMainPicdumpUri,
+  }) async {
+    final pageLinks =
+        await _fetchPageLinks(fromMainPicdumpUri: fromMainPicdumpUri);
+
+    List<String> allImageLinks = [];
+
+    allImageLinks.addAll(await _fetchImageLinks(fromUri: fromMainPicdumpUri));
+
+    for (Uri pageLink in pageLinks) {
+      allImageLinks.addAll(await _fetchImageLinks(fromUri: pageLink));
+    }
+
+    return allImageLinks;
+  }
+
+  Future<List<String>> _fetchImageLinks({required Uri fromUri}) async {
     final document = await _getDocument(forUri: fromUri);
 
     final imageUrls = document
-        .querySelectorAll("img[title^=picdump]")
+        .querySelectorAll("img[title^=picdump][src]")
         .map((element) => element.attributes["src"]!)
         .toList();
 
     return imageUrls;
+  }
+
+  Future<List<Uri>> _fetchPageLinks({
+    required Uri fromMainPicdumpUri,
+  }) async {
+    final document = await _getDocument(forUri: fromMainPicdumpUri);
+
+    final pageLinks = document
+        .querySelectorAll(".ngg-navigation .page-numbers[href]")
+        .map((element) => element.attributes["href"]!)
+        .map((pathWithQueryParam) =>
+            Uri.parse("https://www.hornoxe.com$pathWithQueryParam"))
+        .toList();
+
+    return pageLinks;
   }
 
   Future<Document> _getDocument({required Uri forUri}) async {
