@@ -17,9 +17,9 @@ class Crawler {
 
       return Picdump(
         uri: Uri.parse(href),
-        thumbnailLink: "thumbnailLink",
+        thumbnailLink: "images/dummy_thumbnail.jpeg",
         hash: hash,
-        timestamp: "timestamp",
+        timestamp: "12.06.2022",
       );
     }).toList();
 

@@ -27,29 +27,52 @@ class PicdumpsScreen extends StatelessWidget {
               );
             }
             return ListView.builder(
+              padding: const EdgeInsets.all(10),
               itemCount: snapshot.data!.length,
               itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-                  child: MaterialButton(
-                    padding: const EdgeInsets.all(20),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    color: Theme.of(context).colorScheme.primary,
-                    onPressed: () {
-                      picdumpProvider.setImages(
-                        ofPicdump: snapshot.data!.elementAt(index),
-                      );
+                final picdump = snapshot.data!.elementAt(index);
 
-                      Navigator.pushNamed(
-                        context,
-                        "/images",
-                      );
+                return Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: MaterialButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      picdumpProvider.setImages(ofPicdump: picdump);
+                      Navigator.pushNamed(context, "/images");
                     },
-                    child: Text(
-                      snapshot.data!.elementAt(index).hash,
-                      style: const TextStyle(
-                        fontSize: 20,
+                    child: AspectRatio(
+                      aspectRatio: 16 / 9,
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          Opacity(
+                            opacity: 0.5,
+                            child: Image.asset(
+                              picdump.thumbnailLink,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Center(
+                            child: Text(
+                              "Picdump ${picdump.hash}",
+                              style: const TextStyle(
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            right: 10,
+                            bottom: 10,
+                            child: Text(
+                              picdump.timestamp,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w100,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
