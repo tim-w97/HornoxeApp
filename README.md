@@ -6,4 +6,4 @@ I am too lazy to navigate through the page everytime to see the current pictures
 
 Current state of the app:
 
-https://user-images.githubusercontent.com/63613014/189192116-b6bfc650-6a8f-47b0-a19a-34265a57e86f.mp4
+https://user-images.githubusercontent.com/63613014/189554154-72f3ec03-b1a2-442b-903d-38b422412f8c.mp4
