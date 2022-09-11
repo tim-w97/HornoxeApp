@@ -47,7 +47,7 @@ class PicdumpsScreen extends StatelessWidget {
                         children: [
                           Opacity(
                             opacity: 0.5,
-                            child: Image.asset(
+                            child: Image.network(
                               picdump.thumbnailLink,
                               fit: BoxFit.cover,
                             ),

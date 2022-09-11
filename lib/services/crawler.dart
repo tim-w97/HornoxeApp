@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:hornoxe_app/models/picdump.dart';
 import 'package:html/dom.dart';
 import 'package:html/parser.dart';
@@ -6,19 +7,21 @@ import 'package:http/http.dart';
 
 class Crawler {
   Future<List<Picdump>> get picdumps async {
-    final picdumpsUri = Uri.https("hornoxe.com", "picdumps");
-    final document = await _getDocument(forUri: picdumpsUri);
+    Uri picdumpsUri = Uri.https("hornoxe.com", "picdumps");
+    Document document = await _getDocument(forUri: picdumpsUri);
 
-    final links = document.querySelectorAll("a[title*='Picdump #']");
+    List<Element> links = document.querySelectorAll(
+      ".storytitle a:not([title*=Gifdump])",
+    );
 
-    final picdumps = links.map((link) {
-      String hash = link.text.split(" ").last;
-      String href = link.attributes["href"]!;
+    List<Picdump> picdumps = links.map((Element link) {
+      Element? thumbnail =
+          link.parent?.nextElementSibling?.querySelector(".content_thumb");
 
       return Picdump(
-        uri: Uri.parse(href),
-        thumbnailLink: "images/dummy_thumbnail.jpeg",
-        hash: hash,
+        uri: Uri.parse(link.attributes["href"]!),
+        thumbnailLink: thumbnail!.attributes["src"]!,
+        hash: link.text.split(" ").last,
         timestamp: "12.06.2022",
       );
     }).toList();
@@ -29,7 +32,7 @@ class Crawler {
   Future<List<String>> fetchAllImageLinks({
     required Uri fromMainPicdumpUri,
   }) async {
-    final pageLinks =
+    List<Uri> pageLinks =
         await _fetchPageLinks(fromMainPicdumpUri: fromMainPicdumpUri);
 
     List<String> allImageLinks = [];
@@ -44,9 +47,9 @@ class Crawler {
   }
 
   Future<List<String>> _fetchImageLinks({required Uri fromUri}) async {
-    final document = await _getDocument(forUri: fromUri);
+    Document document = await _getDocument(forUri: fromUri);
 
-    final imageUrls = document
+    List<String> imageUrls = document
         .querySelectorAll("img[title^=picdump][src]")
         .map((element) => element.attributes["src"]!)
         .toList();
@@ -57,9 +60,9 @@ class Crawler {
   Future<List<Uri>> _fetchPageLinks({
     required Uri fromMainPicdumpUri,
   }) async {
-    final document = await _getDocument(forUri: fromMainPicdumpUri);
+    Document document = await _getDocument(forUri: fromMainPicdumpUri);
 
-    final pageLinks = document
+    List<Uri> pageLinks = document
         .querySelectorAll(".ngg-navigation .page-numbers[href]")
         .map((element) => element.attributes["href"]!)
         .map((pathWithQueryParam) =>
@@ -70,11 +73,11 @@ class Crawler {
   }
 
   Future<Document> _getDocument({required Uri forUri}) async {
-    final response = await get(forUri);
+    Response response = await get(forUri);
 
-    final bytes = response.bodyBytes;
-    final html = utf8.decode(bytes, allowMalformed: true);
-    final document = parse(html, encoding: "utf-8");
+    Uint8List bytes = response.bodyBytes;
+    String html = utf8.decode(bytes, allowMalformed: true);
+    Document document = parse(html, encoding: "utf-8");
 
     return document;
   }
