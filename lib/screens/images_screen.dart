@@ -27,19 +27,16 @@ class ImagesScreen extends StatelessWidget {
               }
 
               return ListView.builder(
+                padding: const EdgeInsets.all(10),
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
                   bool isLastImage = index == snapshot.data!.length - 1;
 
                   return Padding(
-                    padding:
-                        EdgeInsets.fromLTRB(20, 20, 20, isLastImage ? 20 : 0),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(20),
-                      child: Image.network(
-                        snapshot.data!.elementAt(index),
-                        fit: BoxFit.cover,
-                      ),
+                    padding: const EdgeInsets.all(10),
+                    child: Image.network(
+                      snapshot.data!.elementAt(index),
+                      fit: BoxFit.cover,
                     ),
                   );
                 },
