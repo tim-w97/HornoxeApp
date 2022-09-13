@@ -10,13 +10,21 @@ class ImagesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final picdumpProvider = context.watch<PicdumpProvider>();
 
+    Stream<List<Image>> images = picdumpProvider.imageLinks.map(
+      (List<String> links) => links
+          .map(
+            (String link) => Image.network(link, fit: BoxFit.fill),
+          )
+          .toList(),
+    );
+
     return Scaffold(
       appBar: AppBar(
         title: Text("Picdump ${picdumpProvider.currentPicdump.hash}"),
       ),
       body: SafeArea(
-        child: StreamBuilder<List<String>>(
-            stream: picdumpProvider.imageLinks,
+        child: StreamBuilder<List<Image>>(
+            stream: images,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const HorniRollingEyes();
@@ -28,10 +36,7 @@ class ImagesScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(10),
-                    child: Image.network(
-                      snapshot.data!.elementAt(index),
-                      fit: BoxFit.cover,
-                    ),
+                    child: snapshot.data!.elementAt(index),
                   );
                 },
               );
