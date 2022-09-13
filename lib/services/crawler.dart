@@ -11,7 +11,7 @@ class Crawler {
     Document document = await _getDocument(forUri: picdumpsUri);
 
     List<Element> links = document.querySelectorAll(
-      ".storytitle a:not([title*=Gifdump])",
+      ".storytitle a:not([title*=Gifdump])[href]",
     );
 
     List<Picdump> picdumps = [];
@@ -21,18 +21,17 @@ class Crawler {
           link.parent?.nextElementSibling?.querySelector(".content_thumb");
 
       picdumps.add(
-        // TODO: prevent !
         Picdump(
           uri: Uri.parse(link.attributes["href"]!),
-          thumbnailLink: thumbnail!.attributes["src"]!,
+          thumbnailLink: thumbnail?.attributes["src"],
           hash: link.text.split(" ").last,
-          timestamp: "12.06.2022",
         ),
       );
       yield picdumps;
     }
   }
 
+  //TODO: implement error handling for this and the other functions below
   Stream<List<String>> fetchAllImageLinks({
     required Uri fromMainPicdumpUri,
   }) async* {

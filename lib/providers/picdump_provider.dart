@@ -7,7 +7,7 @@ class PicdumpProvider {
   late Stream<List<Picdump>> picdumps;
   late Stream<List<String>> imageLinks;
 
-  late Picdump currentPicdump;
+  Picdump? currentPicdump;
 
   PicdumpProvider() {
     picdumps = crawler.picdumps;

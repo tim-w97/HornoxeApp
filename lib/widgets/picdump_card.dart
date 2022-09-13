@@ -29,30 +29,37 @@ class PicdumpCard extends StatelessWidget {
             children: [
               Opacity(
                 opacity: 0.5,
-                child: Image.network(
-                  picdump.thumbnailLink,
-                  fit: BoxFit.cover,
-                ),
+                child: picdump.thumbnailLink != null
+                    ? Image.network(
+                        picdump.thumbnailLink!,
+                        fit: BoxFit.cover,
+                      )
+                    : Image.asset(
+                        "images/picdump_thumbnail_placeholder.jpeg",
+                        fit: BoxFit.cover,
+                      ),
               ),
-              Center(
-                child: Text(
-                  "Picdump ${picdump.hash}",
-                  style: const TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Hero(
+                      tag: picdump.hash,
+                      child: Image.asset(
+                        "images/horni.png",
+                        width: 50,
+                      ),
+                    ),
                   ),
-                ),
-              ),
-              Positioned(
-                right: 10,
-                bottom: 10,
-                child: Text(
-                  picdump.timestamp,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w100,
+                  Text(
+                    "Picdump ${picdump.hash}",
+                    style: const TextStyle(
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
+                ],
               ),
             ],
           ),

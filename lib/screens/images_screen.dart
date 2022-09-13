@@ -20,7 +20,7 @@ class ImagesScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Picdump ${picdumpProvider.currentPicdump.hash}"),
+        title: Text("Picdump ${picdumpProvider.currentPicdump?.hash}"),
       ),
       body: SafeArea(
         child: StreamBuilder<List<Image>>(

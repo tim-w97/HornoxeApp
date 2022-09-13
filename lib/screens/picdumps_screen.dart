@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hornoxe_app/models/picdump.dart';
 import 'package:hornoxe_app/providers/picdump_provider.dart';
 import 'package:hornoxe_app/widgets/horni_rolling_eyes.dart';
+import 'package:hornoxe_app/widgets/no_picdumps.dart';
 import 'package:hornoxe_app/widgets/picdump_card.dart';
 import 'package:provider/provider.dart';
 
@@ -22,6 +23,10 @@ class PicdumpsScreen extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const HorniRollingEyes();
+            }
+
+            if (!snapshot.hasData) {
+              return const NoPicdumps();
             }
 
             return ListView.builder(
