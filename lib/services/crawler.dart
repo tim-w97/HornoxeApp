@@ -6,7 +6,7 @@ import 'package:html/parser.dart';
 import 'package:http/http.dart';
 
 class Crawler {
-  Future<List<Picdump>> get picdumps async {
+  Stream<List<Picdump>> get picdumps async* {
     Uri picdumpsUri = Uri.https("hornoxe.com", "picdumps");
     Document document = await _getDocument(forUri: picdumpsUri);
 
@@ -14,19 +14,23 @@ class Crawler {
       ".storytitle a:not([title*=Gifdump])",
     );
 
-    List<Picdump> picdumps = links.map((Element link) {
+    List<Picdump> picdumps = [];
+
+    for (Element link in links) {
       Element? thumbnail =
           link.parent?.nextElementSibling?.querySelector(".content_thumb");
 
-      return Picdump(
-        uri: Uri.parse(link.attributes["href"]!),
-        thumbnailLink: thumbnail!.attributes["src"]!,
-        hash: link.text.split(" ").last,
-        timestamp: "12.06.2022",
+      picdumps.add(
+        // TODO: prevent !
+        Picdump(
+          uri: Uri.parse(link.attributes["href"]!),
+          thumbnailLink: thumbnail!.attributes["src"]!,
+          hash: link.text.split(" ").last,
+          timestamp: "12.06.2022",
+        ),
       );
-    }).toList();
-
-    return picdumps;
+      yield picdumps;
+    }
   }
 
   Future<List<String>> fetchAllImageLinks({

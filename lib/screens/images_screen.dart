@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:hornoxe_app/providers/picdump_provider.dart';
+import 'package:hornoxe_app/widgets/horni_rolling_eyes.dart';
 import 'package:provider/provider.dart';
 
 class ImagesScreen extends StatelessWidget {
@@ -19,11 +19,7 @@ class ImagesScreen extends StatelessWidget {
             future: picdumpProvider.imageLinks,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
-                  child: SpinKitThreeInOut(
-                    color: Theme.of(context).colorScheme.secondary,
-                  ),
-                );
+                return const HorniRollingEyes();
               }
 
               return ListView.builder(

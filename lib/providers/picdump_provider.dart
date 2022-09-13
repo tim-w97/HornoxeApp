@@ -4,7 +4,7 @@ import 'package:hornoxe_app/services/crawler.dart';
 class PicdumpProvider {
   final crawler = Crawler();
 
-  late Future<List<Picdump>> picdumps;
+  late Stream<List<Picdump>> picdumps;
   late Future<List<String>> imageLinks;
 
   late Picdump currentPicdump;
