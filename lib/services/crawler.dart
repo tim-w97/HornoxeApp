@@ -33,9 +33,9 @@ class Crawler {
     }
   }
 
-  Future<List<String>> fetchAllImageLinks({
+  Stream<List<String>> fetchAllImageLinks({
     required Uri fromMainPicdumpUri,
-  }) async {
+  }) async* {
     List<Uri> pageLinks =
         await _fetchPageLinks(fromMainPicdumpUri: fromMainPicdumpUri);
 
@@ -43,11 +43,12 @@ class Crawler {
 
     allImageLinks.addAll(await _fetchImageLinks(fromUri: fromMainPicdumpUri));
 
+    yield allImageLinks;
+
     for (Uri pageLink in pageLinks) {
       allImageLinks.addAll(await _fetchImageLinks(fromUri: pageLink));
+      yield allImageLinks;
     }
-
-    return allImageLinks;
   }
 
   Future<List<String>> _fetchImageLinks({required Uri fromUri}) async {

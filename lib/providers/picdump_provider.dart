@@ -5,7 +5,7 @@ class PicdumpProvider {
   final crawler = Crawler();
 
   late Stream<List<Picdump>> picdumps;
-  late Future<List<String>> imageLinks;
+  late Stream<List<String>> imageLinks;
 
   late Picdump currentPicdump;
 

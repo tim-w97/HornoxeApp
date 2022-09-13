@@ -15,8 +15,8 @@ class ImagesScreen extends StatelessWidget {
         title: Text("Picdump ${picdumpProvider.currentPicdump.hash}"),
       ),
       body: SafeArea(
-        child: FutureBuilder<List<String>>(
-            future: picdumpProvider.imageLinks,
+        child: StreamBuilder<List<String>>(
+            stream: picdumpProvider.imageLinks,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const HorniRollingEyes();
@@ -26,8 +26,6 @@ class ImagesScreen extends StatelessWidget {
                 padding: const EdgeInsets.all(10),
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
-                  bool isLastImage = index == snapshot.data!.length - 1;
-
                   return Padding(
                     padding: const EdgeInsets.all(10),
                     child: Image.network(
