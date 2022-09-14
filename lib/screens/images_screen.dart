@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hornoxe_app/providers/picdump_provider.dart';
 import 'package:hornoxe_app/widgets/horni_rolling_eyes.dart';
+import 'package:hornoxe_app/widgets/no_data.dart';
 import 'package:provider/provider.dart';
 
 class ImagesScreen extends StatelessWidget {
@@ -28,6 +29,11 @@ class ImagesScreen extends StatelessWidget {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const HorniRollingEyes();
+              }
+
+              if (!snapshot.hasData ||
+                  snapshot.hasData && snapshot.data!.isEmpty) {
+                return const NoData();
               }
 
               return ListView.builder(

@@ -31,7 +31,6 @@ class Crawler {
     }
   }
 
-  //TODO: implement error handling for this and the other functions below
   Stream<List<String>> fetchAllImageLinks({
     required Uri fromMainPicdumpUri,
   }) async* {
